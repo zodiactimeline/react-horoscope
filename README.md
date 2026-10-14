@@ -1,8 +1,8 @@
 # react-horoscope
 
-Lightweight React component for daily horoscopes of all 12 zodiac signs, powered by the free [Zodiac Timeline](https://zodiactimeline.com) horoscope feed.
+Lightweight React component for daily horoscopes of all 12 zodiac signs, powered by the free [Zodiac Timeline Horoscope API](https://zodiactimeline.com/horoscope-api/).
 
-[Live demo](https://zodiactimeline.github.io/react-horoscope/) · [Feed documentation](https://zodiactimeline.com/horoscope-rss-feed/) · [zodiactimeline.com](https://zodiactimeline.com)
+[Live demo](https://zodiactimeline.github.io/react-horoscope/) · [Horoscope API documentation](https://zodiactimeline.com/horoscope-api/) · [zodiactimeline.com](https://zodiactimeline.com)
 
 - A grid of all 12 signs (3 × 4 by default), drawn with Unicode zodiac symbols. It uses no images or icon fonts.
 - A page for each sign that opens on **Today**, with **Yesterday** and **Tomorrow** one tap away, based on the visitor's local date.
@@ -39,7 +39,7 @@ It works in two views:
 1. **All signs:** a grid of the 12 signs, 3 columns by 4 rows by default.
 2. **Sign page:** choosing a sign replaces the grid with that sign's page. It opens on today's reading, with tabs for yesterday and tomorrow. **⇄ Change sign**, at the bottom next to the credit, returns to the grid.
 
-Focus moves to the sign's name when a page opens and back to the sign's card when you return, so keyboard and screen reader users keep their place. If a day is not in the feed (for example a `date` outside its window), the page says so instead of showing a reading.
+Focus moves to the sign's name when a page opens and back to the sign's card when you return, so keyboard and screen reader users keep their place. If a day is outside the Horoscope API's five-day window (for example a distant `date`), the page says so instead of showing a reading.
 
 ## Props
 
@@ -62,7 +62,7 @@ Focus moves to the sign's name when a page opens and back to the sign's card whe
 | `onDayChange` | `(day: 'yesterday' \| 'today' \| 'tomorrow') => void` | — | Called when the visitor picks a day tab. |
 | `date` | `Date \| string` | visitor's local date | Date treated as "today", as a `Date` or `YYYY-MM-DD`. |
 | `className` | `string` | — | Extra class name for the root element, for your own CSS overrides. |
-| `onError` | `(error: Error) => void` | — | Called when the feed cannot be loaded. |
+| `onError` | `(error: Error) => void` | — | Called when the Horoscope API cannot be loaded. |
 
 `ZodiacSign` is one of `aries`, `taurus`, `gemini`, `cancer`, `leo`, `virgo`, `libra`, `scorpio`, `sagittarius`, `capricorn`, `aquarius` or `pisces`.
 
@@ -176,7 +176,7 @@ All elements use `rh-` class names (`rh-grid`, `rh-sign`, `rh-symbol`, `rh-detai
 
 ## Hooks (no UI)
 
-Use the hooks to build your own markup and styles. They need no stylesheet, and they share the same single feed request as the component.
+Use the hooks to build your own markup and styles. They need no stylesheet, and they share the same single Horoscope API request as the component.
 
 ### `useHoroscope(sign, options?)`
 
@@ -212,15 +212,15 @@ function LeoTomorrow() {
 | `date` | `Date \| string` | visitor's local date | Date treated as "today". |
 
 The hook returns `{ horoscope, date, status, error, retry }`:
-- `horoscope` is the `HoroscopeEntry`, or `undefined` while loading, on error, or when the day is not in the feed.
+- `horoscope` is the `HoroscopeEntry`, or `undefined` while loading, on error, or when the day is outside the five-day window.
 - `date` is the requested day as `YYYY-MM-DD`.
 - `status` is `'loading'`, `'success'` or `'error'`.
 
 Pass `undefined` as the sign when none is chosen yet.
 
-### `useHoroscopeFeed()`
+### `useHoroscopeApi()`
 
-Returns the whole feed as `{ feed, status, error, retry }`, where `feed.entries` holds every sign across all five days in the feed. Use it for custom layouts such as a list of every sign's reading for today.
+Returns the whole Horoscope API response as `{ data, status, error, retry }`, where `data.entries` holds every sign across all five days. Use it for custom layouts such as a list of every sign's reading for today.
 
 ### Data
 
@@ -230,21 +230,21 @@ Each `HoroscopeEntry` has `sign`, `date` (`YYYY-MM-DD`), `title`, `link` (its pa
 | --- | --- |
 | `Horoscope` | The ready-made component. |
 | `useHoroscope(sign, options?)` | One sign and day. |
-| `useHoroscopeFeed()` | The whole parsed feed. |
-| `fetchHoroscopeFeed()` | Fetches and parses the feed outside React. Calls share one request per page load. |
-| `parseHoroscopeFeed(xml)` | Parses feed XML with the browser's built-in `DOMParser`. |
+| `useHoroscopeApi()` | The whole parsed Horoscope API response. |
+| `fetchHoroscopeApi()` | Fetches and parses the Horoscope API outside React. Calls share one request per page load. |
+| `parseHoroscopeApiResponse(xml)` | Parses Horoscope API XML with the browser's built-in `DOMParser`. |
 | `SIGNS` | ID, name, element, symbol and date range of each sign, in zodiac order. |
-| `FEED_URL` | `https://zodiactimeline.com/feed.xml` |
+| `HOROSCOPE_API_URL` | `https://zodiactimeline.com/feed.xml` |
 
-Types: `HoroscopeProps`, `UseHoroscopeOptions`, `UseHoroscopeResult`, `HoroscopeFeedState`, `HoroscopeEntry`, `HoroscopeFeed`, `HoroscopeDay`, `SignInfo`, `ZodiacElement` and `ZodiacSign`.
+Types: `HoroscopeProps`, `UseHoroscopeOptions`, `UseHoroscopeResult`, `HoroscopeApiState`, `HoroscopeApiResponse`, `HoroscopeEntry`, `HoroscopeDay`, `SignInfo`, `ZodiacElement` and `ZodiacSign`.
 
-## About the feed
+## About the Zodiac Timeline Horoscope API
 
-The [Zodiac Timeline horoscope feed](https://zodiactimeline.com/horoscope-rss-feed/) is free and needs no API key. It covers all 12 signs across five days (two days back, today and two days ahead) and updates daily just after midnight UTC. That window lets every visitor see yesterday, today and tomorrow in their own time zone.
+The [Zodiac Timeline Horoscope API](https://zodiactimeline.com/horoscope-api/) is free and needs no API key. It covers all 12 signs across five days (two days back, today and two days ahead) and updates daily just after midnight UTC. That window lets every visitor see yesterday, today and tomorrow in their own time zone.
 
 ## Credit
 
-The feed is free to use with visible credit to Zodiac Timeline. The component always shows a "Powered by Zodiac Timeline" link. If you build your own UI with the hooks, show the credit yourself:
+The Horoscope API is free to use with visible credit to Zodiac Timeline. The component always shows a "Powered by Zodiac Timeline" link. If you build your own UI with the hooks, show the credit yourself:
 
 ```html
 <a href="https://zodiactimeline.com">Zodiac Timeline</a>

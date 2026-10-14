@@ -62,7 +62,7 @@ function App() {
         <h1>react-horoscope</h1>
         <p>
           Daily horoscopes for all 12 zodiac signs, powered by the free{' '}
-          <a href="https://zodiactimeline.com/horoscope-rss-feed/">Zodiac Timeline horoscope feed</a>.
+          <a href="https://zodiactimeline.com/horoscope-api/" target="_blank" rel="noopener">Zodiac Timeline Horoscope API</a>.
         </p>
         <pre className="demo-code">
           <code>npm install react-horoscope</code>

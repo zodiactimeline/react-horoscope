@@ -1,7 +1,7 @@
 {
   "name": "react-horoscope",
-  "version": "1.0.0",
-  "description": "Lightweight React component for daily horoscopes of all 12 zodiac signs, powered by the free Zodiac Timeline horoscope feed.",
+  "version": "1.0.1",
+  "description": "Lightweight React component for daily horoscopes of all 12 zodiac signs, powered by the free Zodiac Timeline Horoscope API.",
   "keywords": [
     "react",
     "horoscope",

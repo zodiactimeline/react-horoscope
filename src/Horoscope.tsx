@@ -57,7 +57,7 @@ export interface HoroscopeProps {
    */
   theme?: 'light' | 'dark' | 'auto';
   className?: string;
-  /** Called when the feed cannot be loaded. */
+  /** Called when the Horoscope API cannot be loaded. */
   onError?: (error: Error) => void;
 }
 
@@ -75,7 +75,7 @@ const DAYS: { key: HoroscopeDay; label: string }[] = [
 ];
 
 /**
- * Daily horoscopes for all 12 zodiac signs, powered by the free Zodiac Timeline feed.
+ * Daily horoscopes for all 12 zodiac signs, powered by the free Zodiac Timeline Horoscope API.
  *
  * Opens on a grid of the 12 signs. Choosing a sign shows its page with Today's
  * reading and tabs for Yesterday and Tomorrow; "Change sign" at the bottom returns to the grid.
@@ -258,7 +258,7 @@ export function Horoscope({
             Change sign
           </button>
         )}
-        {/* Attribution required by the Zodiac Timeline feed terms. */}
+        {/* Attribution required by the Zodiac Timeline Horoscope API terms. */}
         <p className="rh-credit">
           Powered by{' '}
           <a href="https://zodiactimeline.com" target="_blank" rel="noopener">

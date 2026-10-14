@@ -4,7 +4,7 @@ import { cleanup, fireEvent, render, renderHook, screen, waitFor } from '@testin
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { Horoscope, useHoroscope } from '../src';
 
-const xml = readFileSync(join(import.meta.dirname, 'feed.xml'), 'utf8');
+const xml = readFileSync(join(import.meta.dirname, 'horoscope-api.xml'), 'utf8');
 const fetchMock = vi.fn().mockResolvedValue({ ok: true, text: async () => xml });
 
 // The fixture covers 2026-10-12 to 2026-10-16, so "today" is pinned to its middle day.
@@ -156,7 +156,7 @@ describe('Horoscope', () => {
     expect(await screen.findByRole('article')).toBeTruthy();
   });
 
-  it('says when a day is outside the feed', async () => {
+  it('says when a day is outside the API window', async () => {
     render(<Horoscope date="2030-01-01" defaultSign="leo" />);
 
     expect(await screen.findByText('This horoscope is not available yet.')).toBeTruthy();

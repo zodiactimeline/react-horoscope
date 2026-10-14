@@ -1,13 +1,13 @@
 import { SIGNS } from './signs';
-import type { HoroscopeEntry, HoroscopeFeed, ZodiacSign } from './types';
+import type { HoroscopeApiResponse, HoroscopeEntry, ZodiacSign } from './types';
 
-/** Public Zodiac Timeline horoscope feed (RSS 2.0, updated daily). */
-export const FEED_URL = 'https://zodiactimeline.com/feed.xml';
+/** Zodiac Timeline Horoscope API endpoint (RSS 2.0 XML, updated daily). */
+export const HOROSCOPE_API_URL = 'https://zodiactimeline.com/feed.xml';
 
-/** XML namespace of the feed's custom `zt:` elements. */
+/** XML namespace of the response's custom `zt:` elements. */
 const ZT_NS = 'https://zodiactimeline.com/feed';
 
-/** Narrows a feed value to one of the 12 sign ids. */
+/** Narrows a response value to one of the 12 sign ids. */
 function isZodiacSign(value: string): value is ZodiacSign {
   return SIGNS.some((sign) => sign.id === value);
 }
@@ -21,17 +21,17 @@ function childText(parent: Element, tag: string, namespace?: string): string {
 }
 
 /**
- * Parses the Zodiac Timeline RSS feed with the browser's built-in DOMParser.
+ * Parses a Zodiac Timeline Horoscope API response with the browser's built-in DOMParser.
  *
  * Runs in the browser only (DOMParser is not available in Node without a DOM).
  *
- * @param xml - Raw feed XML.
+ * @param xml - Raw response XML.
  * @throws If the input is not well-formed XML.
  */
-export function parseHoroscopeFeed(xml: string): HoroscopeFeed {
+export function parseHoroscopeApiResponse(xml: string): HoroscopeApiResponse {
   const doc = new DOMParser().parseFromString(xml, 'application/xml');
   if (doc.getElementsByTagName('parsererror').length > 0) {
-    throw new Error('Horoscope feed is not valid XML');
+    throw new Error('Horoscope API response is not valid XML');
   }
 
   const entries: HoroscopeEntry[] = [];
@@ -57,20 +57,20 @@ export function parseHoroscopeFeed(xml: string): HoroscopeFeed {
 }
 
 /** Shared in-flight or completed request for the current page load. */
-let request: Promise<HoroscopeFeed> | undefined;
+let request: Promise<HoroscopeApiResponse> | undefined;
 
 /**
- * Fetches the feed once per page load. Every caller shares the same request;
+ * Fetches the Horoscope API once per page load. Every caller shares the same request;
  * a failed request is discarded so the next call tries again.
  */
-export function fetchHoroscopeFeed(): Promise<HoroscopeFeed> {
+export function fetchHoroscopeApi(): Promise<HoroscopeApiResponse> {
   if (!request) {
-    request = fetch(FEED_URL)
+    request = fetch(HOROSCOPE_API_URL)
       .then((res) => {
-        if (!res.ok) throw new Error(`Horoscope feed request failed (${res.status})`);
+        if (!res.ok) throw new Error(`Horoscope API request failed (${res.status})`);
         return res.text();
       })
-      .then(parseHoroscopeFeed);
+      .then(parseHoroscopeApiResponse);
     request.catch(() => {
       request = undefined;
     });

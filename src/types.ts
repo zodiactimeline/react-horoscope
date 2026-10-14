@@ -1,4 +1,4 @@
-/** Lowercase sign identifier, matching the feed's `zt:sign` value. */
+/** Lowercase sign identifier, matching the API's `zt:sign` value. */
 export type ZodiacSign =
   | 'aries'
   | 'taurus'
@@ -31,7 +31,7 @@ export interface SignInfo {
   dates: string;
 }
 
-/** One daily reading for one sign, taken from a feed `<item>`. */
+/** One daily reading for one sign, taken from an API response `<item>`. */
 export interface HoroscopeEntry {
   sign: ZodiacSign;
   /** Calendar date in YYYY-MM-DD format. */
@@ -46,9 +46,9 @@ export interface HoroscopeEntry {
   score: number;
 }
 
-/** Parsed feed: all 12 signs across the feed's five-day window. */
-export interface HoroscopeFeed {
-  /** The feed's `lastBuildDate` (RFC 822 date string). */
+/** Parsed Horoscope API response: all 12 signs across its five-day window. */
+export interface HoroscopeApiResponse {
+  /** The response's `lastBuildDate` (RFC 822 date string). */
   updated: string;
   entries: HoroscopeEntry[];
 }
