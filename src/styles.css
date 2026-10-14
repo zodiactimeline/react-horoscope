@@ -1,0 +1,527 @@
+/*
+ * react-horoscope default styles.
+ * Every colour and size is a CSS variable on `.rh`; override them in your own stylesheet.
+ */
+
+.rh {
+  /* Base */
+  --rh-font: inherit;
+  --rh-bg: transparent;
+  --rh-surface: #ffffff;
+  --rh-text: #1d1a2e;
+  --rh-muted: #6b6579;
+  --rh-border: #e6e1d8;
+  --rh-radius: 10px;
+  --rh-gap: 10px;
+
+  /* Highlight colour: selected day, Change sign, links, focus ring (`accentColor` prop) */
+  --rh-accent: var(--rh-accent-color, #6a48f0);
+  --rh-accent-text: #ffffff;
+
+  /* Resting button background: sign buttons and the day bar (`buttonColor` prop) */
+  --rh-button: var(--rh-button-color, transparent);
+
+  /* Built-in sign colours, one per element group */
+  --rh-fire: #ee6a4d;
+  --rh-earth: #5aa843;
+  --rh-air: #5b82f2;
+  --rh-water: #13a3b0;
+
+  font-family: var(--rh-font);
+  color: var(--rh-text);
+  background: var(--rh-bg);
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+.rh *,
+.rh *::before,
+.rh *::after {
+  box-sizing: inherit;
+}
+
+.rh--dark {
+  --rh-surface: #15162a;
+  --rh-text: #f1ecdf;
+  --rh-muted: #8f8aa3;
+  --rh-border: #2a2c4d;
+  --rh-accent: var(--rh-accent-color, #9b84ff);
+  --rh-accent-text: #0d0e1c;
+  --rh-fire: #ff8a6e;
+  --rh-earth: #82d06b;
+  --rh-air: #8ea9ff;
+  --rh-water: #4fd3de;
+}
+
+@media (prefers-color-scheme: dark) {
+  .rh--auto {
+    --rh-surface: #15162a;
+    --rh-text: #f1ecdf;
+    --rh-muted: #8f8aa3;
+    --rh-border: #2a2c4d;
+    --rh-accent: var(--rh-accent-color, #9b84ff);
+    --rh-accent-text: #0d0e1c;
+    --rh-fire: #ff8a6e;
+    --rh-earth: #82d06b;
+    --rh-air: #8ea9ff;
+    --rh-water: #4fd3de;
+  }
+}
+
+/*
+ * Text that stays readable on custom colours, whatever the theme. The component adds these
+ * classes when `accentColor` or `buttonColor` is a hex code, based on how light the colour is.
+ */
+.rh--light-accent {
+  --rh-accent-text: #1d1a2e;
+}
+
+.rh--dark-accent {
+  --rh-accent-text: #ffffff;
+}
+
+/* On custom button colours: dark text on light colours, white text on darker ones, with sign colours to match. */
+.rh--light-buttons .rh-sign,
+.rh--light-buttons .rh-days {
+  --rh-text: #1d1a2e;
+  --rh-muted: #6b6579;
+  --rh-fire: #ee6a4d;
+  --rh-earth: #5aa843;
+  --rh-air: #5b82f2;
+  --rh-water: #13a3b0;
+  color: var(--rh-text);
+}
+
+.rh--dark-buttons .rh-sign,
+.rh--dark-buttons .rh-days {
+  --rh-text: #ffffff;
+  --rh-muted: rgba(255, 255, 255, 0.78);
+  --rh-fire: #ff8a6e;
+  --rh-earth: #82d06b;
+  --rh-air: #8ea9ff;
+  --rh-water: #4fd3de;
+  color: var(--rh-text);
+}
+
+/* `rounded={false}` */
+.rh--square {
+  --rh-radius: 0;
+}
+
+/*
+ * Sign colour: the `signColor` prop's colour (set as --rh-sign-color), or the built-in colours
+ * when `signColor="default"`, where signs of the same element (fire, earth, air, water) share a
+ * colour. The soft tint is always derived from the sign colour.
+ * Override a single sign with, for example: .my-horoscope [data-sign='leo'] { --rh-sign: #d4a017; }
+ */
+.rh [data-sign] {
+  --rh-sign: var(--rh-sign-color, var(--rh-accent));
+  --rh-sign-soft: color-mix(in srgb, var(--rh-sign) 14%, transparent);
+}
+
+.rh--default-colors [data-sign='aries'],
+.rh--default-colors [data-sign='leo'],
+.rh--default-colors [data-sign='sagittarius'] {
+  --rh-sign: var(--rh-fire);
+}
+
+.rh--default-colors [data-sign='taurus'],
+.rh--default-colors [data-sign='virgo'],
+.rh--default-colors [data-sign='capricorn'] {
+  --rh-sign: var(--rh-earth);
+}
+
+.rh--default-colors [data-sign='gemini'],
+.rh--default-colors [data-sign='libra'],
+.rh--default-colors [data-sign='aquarius'] {
+  --rh-sign: var(--rh-air);
+}
+
+.rh--default-colors [data-sign='cancer'],
+.rh--default-colors [data-sign='scorpio'],
+.rh--default-colors [data-sign='pisces'] {
+  --rh-sign: var(--rh-water);
+}
+
+.rh button {
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.rh button:focus-visible,
+.rh a:focus-visible {
+  outline: 2px solid var(--rh-accent);
+  outline-offset: 2px;
+}
+
+/* Sign grid */
+
+.rh-grid {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rh-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.rh-cols-3,
+.rh-cols-auto {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.rh-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.rh-cols-6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+/* `columns="auto"`: 3, 4 or 6 columns (all divide 12 evenly) based on the component's own width. */
+.rh--responsive {
+  container-type: inline-size;
+}
+
+@container (min-width: 600px) {
+  .rh-cols-auto {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@container (min-width: 900px) {
+  .rh-cols-auto {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* Each cell is a size container so a card can switch layout to fit its own width. */
+.rh-cell {
+  container-type: inline-size;
+}
+
+.rh-sign {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 100%;
+  padding: 12px 8px;
+  border: 0;
+  background: var(--rh-button);
+  text-align: center;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.rh-sign:hover {
+  background: color-mix(in srgb, var(--rh-sign) 14%, var(--rh-button));
+}
+
+.rh-sign-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 100%;
+}
+
+/* buttonLayout="horizontal": symbol on the left, text on the right. */
+.rh-layout-horizontal .rh-sign {
+  flex-direction: row;
+  gap: 12px;
+  padding: 12px 14px;
+  text-align: left;
+}
+
+/* buttonLayout="auto": horizontal once the cell is wide enough, otherwise vertical. */
+@container (min-width: 170px) {
+  .rh-layout-auto .rh-sign {
+    flex-direction: row;
+    gap: 12px;
+    padding: 12px 14px;
+    text-align: left;
+  }
+}
+
+.rh-symbol {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--rh-sign-soft);
+  color: var(--rh-sign);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.rh-name,
+.rh-range {
+  /* Truncate rather than overflow when a narrow button cannot fit the text. */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+
+.rh-name {
+  font-size: 0.9375rem;
+  font-weight: 600;
+}
+
+.rh-range {
+  color: var(--rh-muted);
+  font-size: 0.75rem;
+}
+
+/* variant="cards": separate cards with a small gap. */
+.rh-grid--cards {
+  gap: var(--rh-gap);
+}
+
+.rh-grid--cards .rh-sign {
+  border: 1px solid var(--rh-border);
+  border-radius: var(--rh-radius);
+}
+
+.rh-grid--cards .rh-sign:hover {
+  border-color: var(--rh-sign);
+}
+
+/*
+ * variant="tiles": one panel with hairline dividers. Each cell draws a line into the 1px gap on
+ * its right and below it (the third shadow fills the corner where gaps cross). Lines past the
+ * last column and row are clipped by the panel, so this works with any column count and with
+ * transparent buttons.
+ */
+.rh-grid--tiles {
+  gap: 1px;
+  border: 1px solid var(--rh-border);
+  border-radius: var(--rh-radius);
+  overflow: hidden;
+}
+
+.rh-grid--tiles .rh-cell {
+  box-shadow:
+    1px 0 0 var(--rh-border),
+    0 1px 0 var(--rh-border),
+    1px 1px 0 var(--rh-border);
+}
+
+.rh-grid--tiles .rh-sign:focus-visible {
+  outline-offset: -2px;
+}
+
+/* Sign page */
+
+.rh-detail-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 16px;
+}
+
+.rh-detail-header .rh-symbol {
+  width: 52px;
+  height: 52px;
+  font-size: 1.625rem;
+}
+
+.rh-detail-name {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.2;
+}
+
+.rh-detail-name:focus {
+  outline: none;
+}
+
+.rh-detail-meta {
+  margin: 2px 0 0;
+  color: var(--rh-muted);
+  font-size: 0.875rem;
+}
+
+.rh-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border: 0;
+  border-radius: var(--rh-radius);
+  background: color-mix(in srgb, var(--rh-accent) 12%, transparent);
+  color: var(--rh-accent);
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.rh-change:hover {
+  background: var(--rh-accent);
+  color: var(--rh-accent-text);
+}
+
+.rh-days {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border: 1px solid var(--rh-border);
+  border-radius: var(--rh-radius);
+  background: var(--rh-button);
+}
+
+.rh-day {
+  padding: 5px 14px;
+  border: 0;
+  border-radius: calc(var(--rh-radius) - 3px);
+  background: transparent;
+  color: var(--rh-muted);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.rh-day:hover {
+  color: var(--rh-text);
+}
+
+.rh-day[aria-pressed='true'] {
+  background: var(--rh-accent);
+  color: var(--rh-accent-text);
+}
+
+.rh--square .rh-day {
+  border-radius: 0;
+}
+
+.rh-reading {
+  margin-top: 14px;
+  padding: 16px 18px;
+  border: 1px solid var(--rh-border);
+  border-top: 3px solid var(--rh-sign);
+  border-radius: var(--rh-radius);
+  background: var(--rh-surface);
+}
+
+.rh-status {
+  margin-top: 14px;
+  color: var(--rh-muted);
+}
+
+.rh-status p {
+  margin: 0 0 8px;
+}
+
+.rh-retry {
+  padding: 5px 14px;
+  border: 1px solid var(--rh-accent);
+  border-radius: var(--rh-radius);
+  background: transparent;
+  color: var(--rh-accent);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.rh-reading-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  margin-bottom: 4px;
+}
+
+.rh-date {
+  margin: 0;
+  color: var(--rh-muted);
+  font-size: 0.8125rem;
+}
+
+.rh-score {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.8125rem;
+}
+
+.rh-score-label {
+  color: var(--rh-muted);
+}
+
+.rh-score-value {
+  font-weight: 600;
+}
+
+.rh-meter {
+  width: 96px;
+  height: 6px;
+  appearance: none;
+  border: 0;
+  border-radius: 999px;
+  background: var(--rh-border);
+  overflow: hidden;
+}
+
+.rh-meter::-webkit-meter-bar {
+  border: 0;
+  border-radius: 999px;
+  background: var(--rh-border);
+}
+
+.rh-meter::-webkit-meter-optimum-value,
+.rh-meter::-webkit-meter-suboptimum-value,
+.rh-meter::-webkit-meter-even-less-good-value {
+  border-radius: 999px;
+  background: var(--rh-sign);
+}
+
+.rh-meter::-moz-meter-bar {
+  border-radius: 999px;
+  background: var(--rh-sign);
+}
+
+.rh-text {
+  margin: 10px 0 0;
+}
+
+.rh-more {
+  display: inline-block;
+  margin-top: 12px;
+  color: var(--rh-accent);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* Footer: "Change sign" on the left (sign page only), credit on the right. */
+.rh-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 12px;
+  margin-top: 12px;
+}
+
+.rh-credit {
+  margin: 0 0 0 auto;
+  color: var(--rh-muted);
+  font-size: 0.75rem;
+}
+
+.rh-credit a {
+  color: inherit;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rh-sign,
+  .rh-change {
+    transition: none;
+  }
+}

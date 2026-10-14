@@ -1,0 +1,71 @@
+{
+  "name": "react-horoscope",
+  "version": "1.0.0",
+  "description": "Lightweight React component for daily horoscopes of all 12 zodiac signs, powered by the free Zodiac Timeline horoscope feed.",
+  "keywords": [
+    "react",
+    "horoscope",
+    "zodiac",
+    "astrology",
+    "daily-horoscope",
+    "zodiac-timeline"
+  ],
+  "author": "Zodiac Timeline (https://zodiactimeline.com)",
+  "license": "MIT",
+  "homepage": "https://zodiactimeline.github.io/react-horoscope/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zodiactimeline/react-horoscope.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zodiactimeline/react-horoscope/issues"
+  },
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    },
+    "./styles.css": "./dist/styles.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "*.css"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "vite example",
+    "build:example": "vite build example",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build"
+  },
+  "peerDependencies": {
+    "react": ">=17"
+  },
+  "devDependencies": {
+    "@testing-library/react": "^16.3.3",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.2",
+    "jsdom": "^30.1.2",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tsup": "^9.0.0",
+    "typescript": "^6.0.3",
+    "vite": "^8.3.4",
+    "vitest": "^5.0.4"
+  }
+}

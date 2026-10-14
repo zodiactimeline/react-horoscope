@@ -1,0 +1,28 @@
+# name: Publish to npm
+#
+# # Runs when a GitHub release is published, e.g. tag v1.0.1 for package.json version 1.0.1.
+# on:
+#   release:
+#     types: [published]
+#
+# permissions:
+#   contents: read
+#   id-token: write # lets npm verify this workflow (trusted publishing and provenance)
+#
+# jobs:
+#   publish:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
+#       - uses: actions/setup-node@v4
+#         with:
+#           node-version: 22
+#           registry-url: https://registry.npmjs.org
+#           cache: npm
+#       # Trusted publishing needs npm 11.5.1 or later; Node 22 ships with npm 10.
+#       - run: npm install -g npm@latest
+#       - name: Check the release tag matches package.json
+#         run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
+#       - run: npm ci
+#       # prepublishOnly runs typecheck, tests and build first.
+#       - run: npm publish --provenance --access public
